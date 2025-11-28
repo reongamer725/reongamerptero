@@ -1,4 +1,25 @@
 #!/bin/bash
+
+# === MENU ===
+echo "Select an option:"
+echo "1) Install Pterodactyl Panel + Wings"
+echo "2) Set Panel Domain URL"
+echo "3) Exit"
+read -p "Enter choice: " choice
+
+if [[ $choice == 2 ]]; then
+  read -p "Enter your panel domain (example: panel.example.com): " PANEL_DOMAIN
+  sed -i "s/server_name .*/server_name $PANEL_DOMAIN;/" /etc/nginx/sites-available/pterodactyl 2>/dev/null || true
+  sed -i "s#--url=.*#--url=https://$PANEL_DOMAIN#" /var/www/pterodactyl/.env 2>/dev/null || true
+  echo "Domain updated. Run: systemctl restart nginx"
+  exit 0
+elif [[ $choice == 3 ]]; then
+  echo "Exiting installer."
+  exit 0
+fi
+
+# Option 1 continues the installer
+
 # ==============================================
 #  Pterodactyl Panel + Wings Auto Installer
 #  Custom Installer Created for User
